@@ -1,7 +1,9 @@
 ﻿using CustomThemes.Customs;
+using Kitchen;
 using KitchenLib;
 using KitchenLib.Customs;
 using KitchenLib.Event;
+using KitchenLib.Utils;
 using KitchenMods;
 using System.Reflection;
 using UnityEngine;
@@ -28,6 +30,8 @@ namespace CustomThemes
         public Main() : base(MOD_GUID, MOD_NAME, MOD_AUTHOR, MOD_VERSION, MOD_GAMEVERSION, Assembly.GetExecutingAssembly()) { }
 
         internal static CustomTheme NewTheme;
+
+        internal static ViewType CustomDecorationIndicatorViewType = (ViewType)VariousUtils.GetID("CustomDecorationIndicator");
 
         protected override void OnInitialise()
         {

@@ -60,9 +60,14 @@ namespace CustomThemes
             return CustomThemeRegistry.GetDecorationProgress(DecorationType);
         }
 
+        public int GetPartialLevel()
+        {
+            return CustomThemeRegistry.GetPartialLevel(CurrentProgress);
+        }
+
         public int GetCurrentLevel()
         {
-            return Mathf.Clamp(CurrentProgress / 3, 0, MaxLevel);
+            return CustomThemeRegistry.GetBonusLevel(CurrentProgress, MaxLevel);
         }
     }
 
@@ -109,7 +114,6 @@ namespace CustomThemes
                 bool isChanged = false;
                 if (_currentProgress.Count != copy.Count)
                 {
-                    Main.LogInfo("Count change");
                     isChanged = true;
                 }
                 else
@@ -118,7 +122,6 @@ namespace CustomThemes
                     {
                         if (!_currentProgress.TryGetValue(item.Key, out int itemValue) || itemValue != item.Value)
                         {
-                            Main.LogInfo("Value change");
                             isChanged = true;
                             break;
                         }
@@ -261,6 +264,16 @@ namespace CustomThemes
         public static int GetDecorationLevel(DecorationType Type)
         {
             return _registeredThemes.TryGetValue((int)Type, out CustomTheme customTheme) ? customTheme.CurrentLevel : 0;
+        }
+
+        public static int GetPartialLevel(int progress)
+        {
+            return progress % 3;
+        }
+
+        public static int GetBonusLevel(int progress, int maxLevel)
+        {
+            return Mathf.Clamp(progress / 3, 0, maxLevel);
         }
     }
 }

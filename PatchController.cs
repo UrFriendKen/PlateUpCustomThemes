@@ -1,5 +1,7 @@
 ﻿using Kitchen;
 using KitchenMods;
+using System.Runtime.Serialization.Formatters;
+using Unity.Entities;
 
 namespace CustomThemes
 {
@@ -13,6 +15,11 @@ namespace CustomThemes
         }
         protected override void OnUpdate()
         {
+        }
+
+        internal static bool StaticHas<T>(Entity e, bool errorReturn = false) where T : struct, IComponentData
+        {
+            return _instance?.Has<T>(e) ?? errorReturn;
         }
 
         internal static void SetCustomTheme(int theme)
