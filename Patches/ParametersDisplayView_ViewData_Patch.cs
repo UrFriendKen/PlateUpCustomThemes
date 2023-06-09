@@ -10,7 +10,7 @@ namespace CustomThemes.Patches
         [HarmonyPostfix]
         static void IsChanged_Postfix(ref bool __result)
         {
-            if (CustomThemeRegistry.ProgressIsChanged)
+            if (PatchController.IsParameterDisplayForceUpdate())
                 __result = true;
         }
     }

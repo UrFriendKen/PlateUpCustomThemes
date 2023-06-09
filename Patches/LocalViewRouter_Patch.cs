@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Kitchen;
 using Kitchen.Modules;
+using KitchenLib.Utils;
 using System.Reflection;
 using UnityEngine;
 
@@ -89,6 +90,16 @@ namespace CustomThemes.Patches
                 return false;
             }
             return true;
+        }
+
+        [HarmonyPatch(typeof(LocalViewRouter), "GetPrefab")]
+        [HarmonyPostfix]
+        static void GetPrefab_Postfix(ViewType view_type, ref GameObject __result)
+        {
+            if (view_type == ViewType.ParametersDisplay && __result.GetComponent<RegistryProgressUpdateView>() == null)
+            {
+                __result.AddComponent<RegistryProgressUpdateView>();
+            }
         }
     }
 }
