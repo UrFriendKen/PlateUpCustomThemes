@@ -1,7 +1,5 @@
 ﻿using Kitchen;
 using KitchenMods;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -48,7 +46,10 @@ namespace CustomThemes
                 CParameterDisplayDelay delay = paramDelays[i];
                 delay.Frames--;
                 if (delay.Frames < 1)
+                {
                     EntityManager.DestroyEntity(entity);
+                    continue;
+                }
                 Set(entity, delay);
             }
 
@@ -61,6 +62,12 @@ namespace CustomThemes
         internal static bool StaticHas<T>(Entity e, bool errorReturn = false) where T : struct, IComponentData
         {
             return _instance?.Has<T>(e) ?? errorReturn;
+        }
+
+        internal static bool StaticRequire<T>(Entity e, out T comp) where T : struct, IComponentData
+        {
+            comp = default;
+            return _instance?.Require(e, out comp) ?? false;
         }
 
         internal static bool IsParameterDisplayForceUpdate()

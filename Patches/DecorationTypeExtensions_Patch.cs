@@ -13,7 +13,7 @@ namespace CustomThemes.Patches
         {
             if (!CustomThemeRegistry.TryGetTheme((int)type, out CustomTheme customTheme))
                 return true;
-            __result = !customTheme.Icon.IsNullOrEmpty() ? $"<sprite name=\"{customTheme.Icon}\" tint=1>" : "?";
+            __result = customTheme.Icon != "?" ? $"<sprite name=\"{customTheme.Icon}\" tint=1>" : "?";
             return false;
         }
     }

@@ -20,11 +20,14 @@ namespace CustomThemes
         public class UpdateView : IncrementalViewSystemBase<ViewData>, IModSystem
         {
             EntityQuery Views;
+            EntityQuery ShouldForceUpdate;
+
             protected override void Initialise()
             {
                 base.Initialise();
                 Views = GetEntityQuery(new QueryHelper()
                     .All(typeof(CCustomDecorationIndicator), typeof(CLinkedView)));
+                ShouldForceUpdate = GetEntityQuery(typeof(CShouldDecoIndictorForceUpdate));
             }
 
             protected override void OnUpdate()
@@ -34,12 +37,20 @@ namespace CustomThemes
 
                 bool isNight = HasSingleton<SIsNightTime>();
 
+                bool forceUpdate = !ShouldForceUpdate.IsEmpty;
+                if (forceUpdate)
+                {
+                    Main.LogInfo("HERE");
+                    EntityManager.DestroyEntity(ShouldForceUpdate);
+                }
+
                 for (int i = 0; i < views.Length; i++)
                 {
                     CLinkedView view = views[i];
                     CCustomDecorationIndicator customDecorationIndicator = customDecorationIndicators[i];
                     SendUpdate(view, new ViewData
                     {
+                        ForceUpdate = forceUpdate,
                         Decorations = new Dictionary<DecorationType, int>()
                         {
                             { customDecorationIndicator.DecorationType, customDecorationIndicator.Value }   // To add support for more than 1 value? TBC
@@ -51,7 +62,7 @@ namespace CustomThemes
         }
 
         [MessagePackObject(false)]
-        public struct ViewData : IViewData, IViewResponseData, IViewData.ICheckForChanges<ViewData>
+        public struct ViewData : IViewData, IResponseData, IViewData.ICheckForChanges<ViewData>
         {
             [Key(0)]
             public Dictionary<DecorationType, int> Decorations;
@@ -59,13 +70,16 @@ namespace CustomThemes
             [Key(1)]
             public bool IsNight;
 
+            [Key(2)]
+            public bool ForceUpdate;
+
             public bool IsChangedFrom(ViewData check)
             {
-                if (IsNight != check.IsNight || Decorations.Count != check.Decorations.Count)
+                if (check.ForceUpdate || IsNight != check.IsNight || Decorations.Count != check.Decorations.Count)
                     return true;
-                foreach (KeyValuePair<DecorationType, int> decoration in Decorations)
+                foreach (KeyValuePair<DecorationType, int> decoration in check.Decorations)
                 {
-                    if (!check.Decorations.TryGetValue(decoration.Key, out int value) || value != decoration.Value)
+                    if (!Decorations.TryGetValue(decoration.Key, out int value) || value != decoration.Value)
                         return true;
                 }
                 return false;
@@ -78,6 +92,7 @@ namespace CustomThemes
 
         protected override void UpdateData(ViewData view_data)
         {
+            Main.LogInfo("UpdateData");
             Data = view_data;
             base.gameObject.SetActive(view_data.IsNight);
             Modules.SetValues(view_data.Decorations);

@@ -11,10 +11,13 @@ namespace CustomThemes
 {
     public class CustomTheme
     {
+        private GameData _gameData;
+
         public readonly int ID;
         public readonly string Name;
         public readonly int MaxLevel;
-        public readonly string Icon;
+        private readonly string _icon;
+        public string Icon => GetIcon();
 
         private CustomLimitedDecorationLocalisation _customLocalisation;
 
@@ -30,9 +33,9 @@ namespace CustomThemes
             ID = id;
             Name = name;
             MaxLevel = maxLevel;
-            Icon = icon;
+            _icon = icon;
             _customLocalisation = levelLocalisation;
-            Complete();
+            Complete(_gameData);
         }
 
         public static implicit operator DecorationType(CustomTheme customTheme)
@@ -40,9 +43,19 @@ namespace CustomThemes
             return customTheme.DecorationType;
         }
 
-        internal void Complete()
+        internal void Complete(GameData gameData)
         {
             Localisation = _customLocalisation?.GameDataObject;
+
+            _gameData = gameData;
+            if (_gameData == null || _icon.IsNullOrEmpty() || _gameData.GlobalLocalisation.DecorationIcons.ContainsKey(DecorationType))
+                return;
+            _gameData.GlobalLocalisation.DecorationIcons.Add(DecorationType, Icon);
+        }
+
+        public string GetIcon()
+        {
+            return GameData.Main.GlobalLocalisation.GetIcon(DecorationType);
         }
 
         public string GetBonusText(int level)
@@ -147,22 +160,13 @@ namespace CustomThemes
 
             foreach (CustomTheme customTheme in _registeredThemes.Values)
             {
-                RegisterDecorationIcon(customTheme);
-                customTheme.Complete();
+                customTheme.Complete(gameData);
             }
         }
 
         internal static IEnumerable<CustomTheme> GetAllCustomThemes()
         {
             return _registeredThemes.Values;
-        }
-
-        private static void RegisterDecorationIcon(CustomTheme customTheme)
-        {
-            DecorationType customDecorationType = customTheme.DecorationType;
-            if (_gameData == null || customTheme.Icon.IsNullOrEmpty() || _gameData.GlobalLocalisation.DecorationIcons.ContainsKey(customDecorationType))
-                return;
-            _gameData.GlobalLocalisation.DecorationIcons.Add(customDecorationType, customTheme.Icon);
         }
 
         public static CustomTheme RegisterTheme(string themeName, CustomLimitedDecorationLocalisation levelLocalisation, int maxLevel = 3, string iconSpriteName = null)
@@ -188,7 +192,6 @@ namespace CustomThemes
             theme = new CustomTheme(id, themeName, maxLevel, iconSpriteName, levelLocalisation);
             _registeredThemes.Add(id, theme);
             _registeredThemesByName.Add(themeName, theme);
-            RegisterDecorationIcon(theme);
             return theme;
         }
 
