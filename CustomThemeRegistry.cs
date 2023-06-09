@@ -96,7 +96,43 @@ namespace CustomThemes
 
         private static readonly HashSet<int> baseGameThemes = Enum.GetValues(typeof(DecorationType)).Cast<int>().ToHashSet();
 
-        internal static Dictionary<DecorationType, int> CurrentProgresses = new Dictionary<DecorationType, int>();
+        private static Dictionary<DecorationType, int> _currentProgress = new Dictionary<DecorationType, int>();
+        internal static Dictionary<DecorationType, int> CurrentProgress
+        {
+            get
+            {
+                return new Dictionary<DecorationType, int>(_currentProgress);
+            }
+            set
+            {
+                Dictionary<DecorationType, int> copy = new Dictionary<DecorationType, int>(value);
+                bool isChanged = false;
+                if (_currentProgress.Count != copy.Count)
+                {
+                    Main.LogInfo("Count change");
+                    isChanged = true;
+                }
+                else
+                {
+                    foreach (KeyValuePair<DecorationType, int> item in copy)
+                    {
+                        if (!_currentProgress.TryGetValue(item.Key, out int itemValue) || itemValue != item.Value)
+                        {
+                            Main.LogInfo("Value change");
+                            isChanged = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (isChanged)
+                {
+                    _currentProgress = copy;
+                }
+                ProgressIsChanged = isChanged;
+            }
+        }
+        internal static bool ProgressIsChanged { get; private set; } = false;
 
         internal static void Complete(GameData gameData)
         {
@@ -219,7 +255,7 @@ namespace CustomThemes
 
         public static int GetDecorationProgress(DecorationType Type)
         {
-            return CurrentProgresses.TryGetValue(Type, out int value) ? value : 0;
+            return CurrentProgress.TryGetValue(Type, out int value) ? value : 0;
         }
 
         public static int GetDecorationLevel(DecorationType Type)

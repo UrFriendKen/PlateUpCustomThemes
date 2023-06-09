@@ -37,11 +37,7 @@ namespace CustomThemes
                 }
                 Scores[givesCustomDecoration.Type] = value + givesCustomDecoration.Value;
             }
-            CustomThemeRegistry.CurrentProgresses.Clear();
-            foreach (KeyValuePair<DecorationType, int> score in Scores)
-            {
-                CustomThemeRegistry.CurrentProgresses.Add(score.Key, score.Value);
-            }
+            CustomThemeRegistry.CurrentProgress = Scores;
         }
     }
 }
