@@ -45,7 +45,7 @@ namespace CustomThemes
             AddGameDataObject<TestThemeUnlock>();
             NewTheme = CustomThemeRegistry.RegisterTheme("New Theme", AddGameDataObject<TestThemeLocalisation>());
 
-            AddDecorationApplianceGameDataObject<TestDecorationAppliance1>(NewTheme);
+            //AddDecorationApplianceGameDataObject<TestDecorationAppliance1>(NewTheme);
 
             LogInfo("Done loading game data.");
         }

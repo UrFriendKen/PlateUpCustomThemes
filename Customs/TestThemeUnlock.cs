@@ -11,7 +11,7 @@ namespace CustomThemes.Customs
         {
             new CustomThemeAddEffect(Main.NewTheme)
         };
-        public override bool IsUnlockable => true;
+        public override bool IsUnlockable => false;
         public override UnlockGroup UnlockGroup => UnlockGroup.PrimaryTheme;
         public override CardType CardType => CardType.ThemeUnlock;
         public override int MinimumFranchiseTier => 0;

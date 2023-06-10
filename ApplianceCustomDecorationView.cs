@@ -40,7 +40,6 @@ namespace CustomThemes
                 bool forceUpdate = !ShouldForceUpdate.IsEmpty;
                 if (forceUpdate)
                 {
-                    Main.LogInfo("HERE");
                     EntityManager.DestroyEntity(ShouldForceUpdate);
                 }
 
@@ -92,7 +91,6 @@ namespace CustomThemes
 
         protected override void UpdateData(ViewData view_data)
         {
-            Main.LogInfo("UpdateData");
             Data = view_data;
             base.gameObject.SetActive(view_data.IsNight);
             Modules.SetValues(view_data.Decorations);
