@@ -2,7 +2,7 @@
 using KitchenMods;
 using Unity.Entities;
 
-namespace CustomThemes
+namespace CustomThemes.Example
 {
     [UpdateInGroup(typeof(ApplyEffectsGroup))]
     public class ApplyTestThemeDecorationEffects : GameSystemBase, IModSystem
@@ -14,7 +14,19 @@ namespace CustomThemes
 
         protected override void OnUpdate()
         {
-            //Main.LogInfo(Main.NewTheme.GetCurrentProgress());
+            int level = Main.NewTheme.GetCurrentLevel();
+            if (level > 0)
+            {
+
+            }
+            if (level > 1)
+            {
+
+            }
+            if (level > 2)
+            {
+
+            }
         }
     }
 }

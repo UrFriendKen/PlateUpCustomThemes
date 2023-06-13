@@ -1,4 +1,4 @@
-﻿using CustomThemes.Customs;
+﻿using CustomThemes.Example;
 using Kitchen;
 using KitchenLib;
 using KitchenLib.Customs;
@@ -37,15 +37,17 @@ namespace CustomThemes
         {
             LogWarning($"{MOD_GUID} v{MOD_VERSION} in use!");
         }
+        
 
+
+        // See here
         private void AddGameData()
         {
             LogInfo("Attempting to register game data...");
 
             AddGameDataObject<TestThemeUnlock>();
             NewTheme = CustomThemeRegistry.RegisterTheme("New Theme", AddGameDataObject<TestThemeLocalisation>());
-
-            //AddDecorationApplianceGameDataObject<TestDecorationAppliance1>(NewTheme);
+            AddDecorationApplianceGameDataObject<TestDecorationAppliance1>(NewTheme);
 
             LogInfo("Done loading game data.");
         }
@@ -57,6 +59,10 @@ namespace CustomThemes
             return customAppliance;
         }
 
+
+
+
+
         protected override void OnUpdate()
         {
         }
@@ -67,12 +73,12 @@ namespace CustomThemes
             // TODO: Uncomment the following if you have an asset bundle.
             // TODO: Also, make sure to set EnableAssetBundleDeploy to 'true' in your ModName.csproj
 
-            // LogInfo("Attempting to load asset bundle...");
-            // Bundle = mod.GetPacks<AssetBundleModPack>().SelectMany(e => e.AssetBundles).First();
-            // LogInfo("Done loading asset bundle.");
+            //LogInfo("Attempting to load asset bundle...");
+            //Bundle = mod.GetPacks<AssetBundleModPack>().SelectMany(e => e.AssetBundles).First();
+            //LogInfo("Done loading asset bundle.");
 
             // Register custom GDOs
-            AddGameData();
+            //AddGameData();
 
             // Perform actions when game data is built
             Events.BuildGameDataEvent += delegate (object s, BuildGameDataEventArgs args)

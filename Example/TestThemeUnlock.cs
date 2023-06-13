@@ -1,8 +1,9 @@
-﻿using KitchenData;
+﻿using CustomThemes.Customs;
+using KitchenData;
 using KitchenLib.Customs;
 using System.Collections.Generic;
 
-namespace CustomThemes.Customs
+namespace CustomThemes.Example
 {
     public class TestThemeUnlock : CustomUnlockCard
     {
@@ -43,9 +44,9 @@ namespace CustomThemes.Customs
                 Locale = Locale.English,
                 Text = new Dictionary<int, string>()
                 {
-                    { 1, "Level 1 Bonus" },
-                    { 2, "Level 2 Bonus" },
-                    { 3, "Level 3 Bonus" }
+                    { 1, "Level 1 Effect Text" },
+                    { 2, "Level 2 Effect Text" },
+                    { 3, "Level 3 Effect Text" }
                 }
             })
         };
