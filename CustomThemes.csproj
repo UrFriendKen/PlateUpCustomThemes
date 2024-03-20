@@ -35,10 +35,16 @@
 	  <None Remove="plateup_mod_metadata.json" />
 	  <None Remove="*.png" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Example\ApplyTestThemeDecorationEffects.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="Example\ApplyTestThemeDecorationEffects.cs" />
+	</ItemGroup>
   
 	<ItemGroup>
 		<PackageReference Include="MessagePack.Annotations" Version="2.4.59" />
-		<PackageReference Include="Yariazen.PlateUp.ModBuildUtilities" Version="1.6.16" />
+		<PackageReference Include="Yariazen.PlateUp.ModBuildUtilities" Version="1.11.5" />
 	
 		<!-- For if you build KitchenLib locally -->
 		<Reference Include="KitchenLib">
